@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tagalog ↔ English Quiz</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 2rem;
+      text-align: center;
+    }
+    input, button {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      margin-top: 1rem;
+    }
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tagalog ↔ English Quiz</h1>
+  <p id="question">Loading...</p>
+
+  <input type="text" id="answer" placeholder="Type your answer" />
+  <br>
+  <button onclick="checkAnswer()">Submit</button>
+
+  <div id="result"></div>
+
+  <script src="words.js"></script>
+  <script>
+    let currentWord;
+    let isTagalogToEnglish;
+
+    function nextQuestion() {
+      if (!words || words.length === 0) {
+        document.getElementById("question").innerText = "No words loaded.";
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * words.length);
+      currentWord = words[randomIndex];
+      isTagalogToEnglish = Math.random() < 0.5;
+
+      document.getElementById("answer").value = "";
+      document.getElementById("result").innerText = "";
+
+      if (isTagalogToEnglish) {
+        document.getElementById("question").innerText = `Translate to English: ${currentWord.tagalog}`;
+      } else {
+        document.getElementById("question").innerText = `Translate to Tagalog: ${currentWord.english}`;
+      }
+    }
+
+    function checkAnswer() {
+      const userInput = document.getElementById("answer").value.trim().toLowerCase();
+      const correct = isTagalogToEnglish
+        ? currentWord.english.toLowerCase()
+        : currentWord.tagalog.toLowerCase();
+
+      if (userInput === correct) {
+        document.getElementById("result").innerText = "✅ Correct!";
+      } else {
+        document.getElementById("result").innerText = `❌ Wrong! Correct answer: ${correct}`;
+      }
+
+      setTimeout(nextQuestion, 1500);
+    }
+
+    window.onload = nextQuestion;
+  </script>
+
+</body>
+</html>
